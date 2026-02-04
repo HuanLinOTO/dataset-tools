@@ -1,25 +1,41 @@
 # Dataset Tools (Rust + gpui)
 
-DiffSinger dataset processing tools refactored in Rust with gpui GUI framework.
+DiffSinger dataset processing tools refactored in Rust with planned gpui GUI framework.
+
+## Current Status
+
+✅ **Core Audio Processing Library** - Fully implemented in Rust
+- Audio file I/O (WAV, MP3, FLAC, OGG)
+- High-quality resampling
+- Silence-based audio slicing
+- Audio utilities
+
+🚧 **GUI Applications** - Currently CLI placeholders, gpui GUI implementation planned
+- AudioSlicer - Audio slicing functionality available as library
+- MinLabel - To be implemented
+- SlurCutter - To be implemented
+- LyricFA - To be implemented
+- HubertFA - To be implemented
+- SomeInfer - To be implemented
 
 ## Applications
 
-All applications now use the modern gpui framework for cross-platform GUI:
+All applications now use pure Rust. GUI with gpui framework is planned for future releases:
 
-+ **AudioSlicer** - Slice audio files based on silence detection
-+ **MinLabel** - Audio labeling and annotation tool
-+ **SlurCutter** - Detect and cut audio slurs
-+ **LyricFA** - Lyric forced alignment with ASR
-+ **HubertFA** - Forced alignment using Hubert models
-+ **SomeInfer** - Model inference tool
++ **AudioSlicer** - Slice audio files based on silence detection (library ready)
++ **MinLabel** - Audio labeling and annotation tool (planned)
++ **SlurCutter** - Detect and cut audio slurs (planned)
++ **LyricFA** - Lyric forced alignment with ASR (planned)
++ **HubertFA** - Forced alignment using Hubert models (planned)
++ **SomeInfer** - Model inference tool (planned)
 
 ## Features
 
 - ✅ Pure Rust implementation for safety and performance
-- ✅ Modern gpui framework for native cross-platform GUI
-- ✅ Fast audio processing with Symphonia and rubato
+- ✅ Modern audio processing with Symphonia and rubato
 - ✅ Clean workspace architecture with shared core library
 - ✅ Type-safe and memory-safe by default
+- 🚧 GUI with gpui framework (planned for future releases)
 
 ## Supported Platforms
 
@@ -39,7 +55,8 @@ All applications now use the modern gpui framework for cross-platform GUI:
 
 ### Runtime Requirements
 
-- Vulkan, Metal, or DirectX 12 (for GPU rendering via gpui)
+- Standard Rust runtime (no additional dependencies for CLI tools)
+- GPU support for GUI (when implemented) will require Vulkan, Metal, or DirectX 12
 
 ## Building from Source
 
@@ -130,26 +147,42 @@ The `audio-core` crate provides shared functionality:
 
 ### Core Libraries
 
-+ [gpui](https://github.com/zed-industries/zed) - Modern GPU-accelerated UI framework
-  - Apache 2.0 / GPL v3.0
 + [Symphonia](https://github.com/pdm-project/symphonia) - Pure Rust audio decoding
   - MPL v2.0
 + [rubato](https://github.com/HEnquist/rubato) - High-quality audio resampling
   - MIT License
 + [hound](https://github.com/ruuda/hound) - WAV encoding/decoding
   - Apache 2.0
-+ [tokio](https://tokio.rs) - Async runtime
-  - MIT License
++ [rustfft](https://github.com/PolySync/rust-fft) - Fast Fourier Transform
+  - MIT/Apache 2.0
+
+### Planned Libraries
+
++ [gpui](https://github.com/zed-industries/zed) - Modern GPU-accelerated UI framework (planned)
+  - Apache 2.0 / GPL v3.0
 
 ## Migration from C++/Qt
 
 This Rust rewrite brings several advantages:
 
 1. **Memory Safety**: Rust's ownership system prevents common C++ bugs
-2. **Modern UI**: gpui provides better performance than Qt
+2. **Modern Architecture**: Clean separation of core library and applications
 3. **Easier Deployment**: Single binary with fewer runtime dependencies
 4. **Better Tooling**: Cargo makes building and dependency management simple
 5. **Cross-platform**: Same codebase for all platforms
+
+### Current Progress
+
+✅ Core audio processing library fully implemented in Rust
+- Audio I/O for multiple formats
+- High-quality resampling
+- Silence-based slicing algorithm (ported from C++)
+- Audio utilities
+
+🚧 GUI applications with gpui
+- Framework selected (gpui from Zed)
+- Implementation planned for future release
+- CLI tools available now for immediate use
 
 ## Development
 

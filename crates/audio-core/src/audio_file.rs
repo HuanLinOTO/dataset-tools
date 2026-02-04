@@ -1,6 +1,6 @@
 use anyhow::Result;
 use std::path::Path;
-use symphonia::core::audio::{AudioBufferRef, SampleBuffer, SignalSpec};
+use symphonia::core::audio::{AudioBufferRef, SampleBuffer};
 use symphonia::core::codecs::DecoderOptions;
 use symphonia::core::formats::FormatOptions;
 use symphonia::core::io::MediaSourceStream;
@@ -114,9 +114,10 @@ impl AudioFile {
         Ok(())
     }
 
-    fn convert_audio_buffer(buffer: &AudioBufferRef, channels: usize) -> Result<Vec<f32>> {
+    fn convert_audio_buffer(buffer: &AudioBufferRef, _channels: usize) -> Result<Vec<f32>> {
         let duration = buffer.frames();
-        let mut sample_buf = SampleBuffer::<f32>::new(duration as u64, SignalSpec::new(buffer.spec().rate, channels.try_into()?));
+        let spec = buffer.spec();
+        let mut sample_buf = SampleBuffer::<f32>::new(duration as u64, *spec);
         sample_buf.copy_interleaved_ref(buffer.clone());
         Ok(sample_buf.samples().to_vec())
     }

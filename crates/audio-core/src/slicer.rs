@@ -28,8 +28,8 @@ impl Default for SliceConfig {
 }
 
 pub struct AudioSlicer {
-    config: SliceConfig,
-    sample_rate: u32,
+    _config: SliceConfig,
+    _sample_rate: u32,
     threshold_linear: f64,
     hop_size_samples: i64,
     win_size_samples: i64,
@@ -64,8 +64,8 @@ impl AudioSlicer {
             (config.max_sil_kept * sample_rate as i64 + 500) / (1000 * hop_size_samples);
 
         Ok(Self {
-            config,
-            sample_rate,
+            _config: config,
+            _sample_rate: sample_rate,
             threshold_linear,
             hop_size_samples,
             win_size_samples,

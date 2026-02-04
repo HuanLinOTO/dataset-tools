@@ -18,8 +18,8 @@ authors = ["Dataset Tools Contributors"]
 repository = "https://github.com/HuanLinOTO/dataset-tools"
 
 [workspace.dependencies]
-# gpui for GUI
-gpui = { git = "https://github.com/zed-industries/zed", rev = "v0.165.2" }
+# GUI - To be implemented with gpui in future updates
+# gpui = { git = "https://github.com/zed-industries/zed", tag = "v0.179.5" }
 
 # Audio processing
 symphonia = { version = "0.5", features = ["all"] }
