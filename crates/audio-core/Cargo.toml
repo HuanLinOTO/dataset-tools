@@ -1,0 +1,17 @@
+[package]
+name = "audio-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+symphonia.workspace = true
+hound.workspace = true
+rubato.workspace = true
+ndarray.workspace = true
+rustfft.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+tracing.workspace = true
