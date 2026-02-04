@@ -80,7 +80,7 @@ impl AudioFile {
 
             match decoder.decode(&packet) {
                 Ok(decoded) => {
-                    let mut sample_buf = Self::convert_audio_buffer(&decoded, channels)?;
+                    let mut sample_buf = Self::convert_audio_buffer(&decoded)?;
                     samples.append(&mut sample_buf);
                 }
                 Err(_) => continue,
@@ -114,7 +114,7 @@ impl AudioFile {
         Ok(())
     }
 
-    fn convert_audio_buffer(buffer: &AudioBufferRef, _channels: usize) -> Result<Vec<f32>> {
+    fn convert_audio_buffer(buffer: &AudioBufferRef) -> Result<Vec<f32>> {
         let duration = buffer.frames();
         let spec = buffer.spec();
         let mut sample_buf = SampleBuffer::<f32>::new(duration as u64, *spec);

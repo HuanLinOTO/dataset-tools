@@ -19,12 +19,15 @@ impl Resampler {
             return Ok(input.to_vec());
         }
 
-        let chunk_size = 1024;
+        const CHUNK_SIZE: usize = 1024;
+        // Sub-chunks parameter: controls internal chunking for better cache locality
+        const SUB_CHUNKS: usize = 2;
+        
         let mut resampler = FftFixedIn::<f32>::new(
             self.input_rate as usize,
             self.output_rate as usize,
-            chunk_size,
-            2,
+            CHUNK_SIZE,
+            SUB_CHUNKS,
             channels,
         )?;
 
@@ -39,17 +42,17 @@ impl Resampler {
         // Process in chunks
         let mut output_channels: Vec<Vec<f32>> = vec![Vec::new(); channels];
         
-        for chunk_start in (0..frames).step_by(chunk_size) {
-            let chunk_end = (chunk_start + chunk_size).min(frames);
+        for chunk_start in (0..frames).step_by(CHUNK_SIZE) {
+            let chunk_end = (chunk_start + CHUNK_SIZE).min(frames);
             let mut chunk: Vec<Vec<f32>> = channel_data
                 .iter()
                 .map(|ch| ch[chunk_start..chunk_end].to_vec())
                 .collect();
 
             // Pad the last chunk if needed
-            if chunk[0].len() < chunk_size {
+            if chunk[0].len() < CHUNK_SIZE {
                 for ch in &mut chunk {
-                    ch.resize(chunk_size, 0.0);
+                    ch.resize(CHUNK_SIZE, 0.0);
                 }
             }
 

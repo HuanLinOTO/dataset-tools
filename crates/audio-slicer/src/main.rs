@@ -6,11 +6,7 @@ use std::path::PathBuf;
 pub fn process_audio(
     input_path: &str,
     output_dir: &str,
-    threshold: f64,
-    min_length: i64,
-    min_interval: i64,
-    hop_size: i64,
-    max_sil_kept: i64,
+    config: SliceConfig,
 ) -> Result<usize> {
     println!("Processing audio...");
 
@@ -20,15 +16,6 @@ pub fn process_audio(
     // Load audio file
     let audio = AudioFile::load(&input_path)?;
     
-    // Create config
-    let config = SliceConfig {
-        threshold,
-        min_length,
-        min_interval,
-        hop_size,
-        max_sil_kept,
-    };
-
     // Create slicer
     let slicer = AudioSlicer::new(audio.sample_rate, config)?;
     
@@ -46,8 +33,18 @@ pub fn process_audio(
 
     std::fs::create_dir_all(&output_dir)?;
 
-    for (i, (start, end)) in chunks.iter().enumerate() {
-        let chunk_samples: Vec<f32> = audio.samples[*start * audio.channels..*end * audio.channels].to_vec();
+    for (i, &(start, end)) in chunks.iter().enumerate() {
+        // Safely calculate indices with bounds checking
+        let start_idx = start.checked_mul(audio.channels)
+            .ok_or_else(|| anyhow::anyhow!("Start index overflow"))?;
+        let end_idx = end.checked_mul(audio.channels)
+            .ok_or_else(|| anyhow::anyhow!("End index overflow"))?;
+        
+        if end_idx > audio.samples.len() {
+            anyhow::bail!("Slice end index {} exceeds audio length {}", end_idx, audio.samples.len());
+        }
+        
+        let chunk_samples: Vec<f32> = audio.samples[start_idx..end_idx].to_vec();
         
         let chunk_audio = AudioFile {
             samples: chunk_samples,
@@ -80,5 +77,7 @@ fn main() {
     println!();
     println!("Example code:");
     println!("  use audio_slicer::process_audio;");
-    println!("  process_audio(\"input.wav\", \"output/\", -40.0, 5000, 300, 20, 5000).unwrap();");
+    println!("  use audio_core::SliceConfig;");
+    println!("  let config = SliceConfig::default();");
+    println!("  process_audio(\"input.wav\", \"output/\", config).unwrap();");
 }
