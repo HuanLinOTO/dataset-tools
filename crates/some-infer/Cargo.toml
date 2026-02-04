@@ -1,0 +1,13 @@
+[package]
+name = "some-infer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "some-infer"
+path = "src/main.rs"
+
+[dependencies]
+audio-core = { path = "../audio-core" }

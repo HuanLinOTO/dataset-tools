@@ -98,3 +98,9 @@ CMakeSettings.json
 setup-vcpkg.json
 setup-vcpkg-temp*
 /src/libs/onnxruntime/
+
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
